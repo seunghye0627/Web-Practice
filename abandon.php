@@ -16,7 +16,6 @@
             width: auto;
             text-align: center;
             background-color: white;
-            ;
         }
 
         #logo p {
@@ -28,8 +27,6 @@
         #menu {
             height: 40px;
             background-color: #472A3C;
-
-
         }
 
         #menu ul {
@@ -78,20 +75,15 @@
         #option {
             width: auto;
             height: 300px;
-
-        }
-
-        #option .option-select {
-
-            position: absolute;
-            top: 40%;
-            left: 45%;
-            margin-top: -51px;
-            margin-left: -153px;
             width: 450px;
             height: 250px;
             background-color: #DEDCD5;
+            text-align: left;
+            padding: 5px;
+            margin-bottom: 30px;
+
         }
+
 
         #option .date-select {
 
@@ -137,27 +129,57 @@
 
 
         }
+
         #searchResult {
             text-align: center;
+            display: block;
+            width: 900px;
         }
-
-        #searchResult .result {
-            display: inline-block;  
-            text-align: center;
-            width: 760px;
-        }
-
 
 
         #searchResult .content {
             float: left;
-            text-align: center;
-            padding-left: 20px;
-            padding-right:20px;
+            text-align: left;
+            padding-left: 10px;
+            padding-right: 10px;
+            white-space: normal;
+            width: 400px;
+        }
+
+
+        }
+
+
+        #searchResult .content a {
+
+            text-decoration: none;
+        }
+
+        #searchResult .content-image {
+            padding: 0px 5px 20px 0px;
+            float: left;
+
+        }
+
+        .content-noticeNo {
+            font-size: 15px;
+        }
+
+        .content-info {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            white-space: normal;
+        }
+
+        .noticeNo {
+            font-size: 15px;
+
         }
 
     </style>
 </head>
+
 
 <body>
     <div id="logo" class="container">
@@ -168,16 +190,19 @@
     <div id="menu-wrapper" class="container">
         <div id="menu">
             <ul>
-                <li><a href="#">MAIN</a></li>
-                <li><a href="#">NULL</a></li>
+                <li><a href="main.php">MAIN</a></li>
+                <li><a href="null.php">NULL</a></li>
                 <li><a class="currentPage" href="#">유기동물 조회</a></li>
-                <li><a href="#">커뮤니티</a></li>
+                <li><a href="community.php">커뮤니티</a></li>
             </ul>
         </div>
     </div>
 
     <?php 
     // Include the database config file 
+      error_reporting(E_ALL);
+
+    ini_set("display_errors", 1);
     include_once("DB.php");
 
      
@@ -185,47 +210,47 @@
     $query = "SELECT * FROM sido"; 
     $result = $conn->query($query); 
 ?>
-    <div id="option">
-        <div class="option-select">
-            <form method="post" id="abandonSearch" action="abandon-search.php">
-                <div class="date-select">
-                    <p>시작</p>
-                    <input type="date" name="bgnde">
-                    <p>끝</p>
-                    <input type="date" name="endde">
-                </div>
-                <div class="address-select">
-                    <p>시/도</p>
-                    <select id="sido" name="sidoCode">
-                        <option value="">전체</option>
-                        <?php 
-                    if($result->num_rows > 0){ 
-                        while($row = $result->fetch_assoc()){  
-                            echo '<option value="'.$row['sidoCode'].'">'.$row['sidoName'].'</option>'; 
-                        } 
-                    }else{ 
-                        echo '<option value="">sido not available</option>'; 
-                    } 
+    <center>
+        <div id="option">
+                <form method="post" id="abandonSearch">
+                    <div class="date-select">
+                        <p>시작</p>
+                        <input type="date" id="bgnde" name="bgnde">
+                        <p>끝</p>
+                        <input type="date" id="endde" name="endde">
+                    </div>
+                    <div class="address-select">
+                        <p>시/도</p>
+                        <select id="sido" name="sidoCode">
+                            <option value="">전체</option>
+                            <?php 
+                            if($result->num_rows > 0){ 
+                                while($row = $result->fetch_assoc()){  
+                                    echo '<option value="'.$row['sidoCode'].'">'.$row['sidoName'].'</option>'; 
+                                } 
+                            }else{ 
+                                echo '<option value="">Error</option>'; 
+                            } 
     ?>
-                    </select>
-                    <p>시/군/구</p>
-                    <!-- State dropdown -->
-                    <select id="sigungu" name="sigunguCode">
-                        <option value="">전체</option>
-                    </select>
+                        </select>
+                        <p>시/군/구</p>
+                        <!-- State dropdown -->
+                        <select id="sigungu" name="sigunguCode">
+                            <option value="">전체</option>
+                        </select>
 
-                    <!-- City dropdown -->
-                    <?php
+                        <!-- City dropdown -->
+                        <?php
                   // Fetch all the country data 
                     $query = "SELECT * FROM category"; 
                     $result = $conn->query($query); 
                 ?>
-                </div>
-                <div class="kind-select">
-                    <p>축종</p>
-                    <select id="category" name="upkind">
-                        <option value="">전체</option>
-                        <?php 
+                    </div>
+                    <div class="kind-select">
+                        <p>축종</p>
+                        <select id="category" name="upkind">
+                            <option value="">전체</option>
+                            <?php 
                         if($result->num_rows > 0){ 
                             while($row = $result->fetch_assoc()){  
                                 echo '<option value="'.$row['categoryID'].'">'.$row['categoryName'].'</option>'; 
@@ -235,50 +260,93 @@
                                     echo '<option value="">sido not available</option>'; 
                                 } 
                         ?>
-                    </select>
-                    <p>품종</p>
-                    <select id="kind" name="kind">
-                        <option value="">전체</option>
-                    </select>
-                </div>
+                        </select>
+                        <p>품종</p>
+                        <select id="kind" name="kind">
+                            <option value="">전체</option>
+                        </select>
+                    </div>
 
-                <div class="select-submit">
-                    <input type="submit" name="검색" id="submitBtn">
-                </div>
-            </form>
-
-        </div>
-    </div>
+                    <div class="select-submit">
+                        <input type="submit" name="검색" id="submitBtn">
+                    </div>
+                </form>
+            </div>
+    </center>
     <div id="searchResult" class="container">
-        <div class="result">
             <div class="content">
-                <img src="images/img01.jpg" width="150" height="120" alt="" /><br />
-                <p>날짜</p>
-                <p>장소</p>
-                <p>견종</p>
+                <div class="content-image">
+                    <img src="images/img03.jpg" width="180" height="150" alt="" />
+                </div>
+                <div class="content-right">
+                    <ul class="content-info">
+                        <b>
+                            <li class="noticeNo">서울-양천-2014-0050</li>
+                        </b>
+                        <li>20140301</li>
+                        <li>[개] 믹스견/여</li>
+                        <li>중이염 심각함, 줄무늬</li>
+                        <li>신월3공 195-1 근처</li>
+                        <li>공고 중</li>
+                        <button id="animal-info">자세히 보기</button>
+                    </ul>
+                </div>
             </div>
             <div class="content">
-                <img src="images/img01.jpg" width="150" height="120" alt="" /><br />
-                <p>날짜</p>
-                <p>장소</p>
-                <p>견종</p>
+                <div class="content-image">
+                    <img src="images/img03.jpg" width="180" height="150" alt="" />
+                </div>
+                <div class="content-right">
+                    <ul class="content-info">
+                        <b>
+                            <li class="noticeNo">서울-양천-2014-0050</li>
+                        </b>
+                        <li>20140301</li>
+                        <li>[개] 믹스견/여</li>
+                        <li>중이염 심각함, 줄무늬</li>
+                        <li>신월3공 195-1 근처</li>
+                        <li>공고 중</li>
+                        <button id="animal-info">자세히 보기</button>
+                    </ul>
+                </div>
             </div>
-
             <div class="content">
-                <img src="images/img01.jpg" width="150" height="120" alt="" /><br />
-                <p>날짜</p>
-                <p>장소</p>
-                <p>견종</p>
+                <div class="content-image">
+                    <img src="images/img03.jpg" width="180" height="150" alt="" />
+                </div>
+                <div class="content-right">
+                    <ul class="content-info">
+                        <b>
+                            <li class="noticeNo">서울-양천-2014-0050</li>
+                        </b>
+                        <li>20140301</li>
+                        <li>[개] 믹스견/여</li>
+                        <li>중이염 심각함, 줄무늬</li>
+                        <li>신월3공 195-1 근처</li>
+                        <li>공고 중</li>
+                        <button id="animal-info">자세히 보기</button>
+                    </ul>
+                </div>
             </div>
             <div class="content">
-                <img src="images/img01.jpg" width="150" height="120" alt="" /><br />
-                <p>날짜</p>
-                <p>장소</p>
-                <p>견종</p>
+                <div class="content-image">
+                    <img src="images/img03.jpg" width="180" height="150" alt="" />
+                </div>
+                <div class="content-right">
+                    <ul class="content-info">
+                        <b>
+                            <li class="noticeNo">서울-양천-2014-0050</li>
+                        </b>
+                        <li>20140301</li>
+                        <li>[개] 믹스견/여</li>
+                        <li>중이염 심각함, 줄무늬</li>
+                        <li>신월3공 195-1 근처</li>
+                        <li>공고 중</li>
+                        <button id="animal-info">자세히 보기</button>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
-
 
 </body>
 
@@ -319,25 +387,39 @@
         });
     });
 
+    $("#submitBtn").click(function(event) {
 
-    function abSubmit() {
-        var formData = $("#abandonSearch").serialize();
+        //preventDefault 는 기본으로 정의된 이벤트를 작동하지 못하게 하는 메서드이다. submit을 막음
+        event.preventDefault();
+
+        // Get form
+        var form = $('#abandonSearch')[0];
+
+        // Create an FormData object 
+        var data = new FormData(form);
+
+        // disabled the submit button
+        //$("#submitBtn").prop("disabled", true);
 
         $.ajax({
-
-            cache: false,
+            type: "POST",
+            enctype: 'multipart/form-data',
             url: "abandon-search.php",
-            type: 'POST',
-            data: formData,
-            success: function(result) {
-                console.log(result);
+            data: data,
+            processData: false,
+            contentType: false,
+            cache: false,
+            timeout: 600000,
+            success: function(html) {
+                $("#searchResult").html(html);
             },
-            error: function(request, status, error) {
-                console.log(error);
+            error: function(e) {
+                console.log("ERROR : ", e);
+                $("#submitBtn").prop("disabled", false);
+                alert("fail");
             }
-
-
         });
-    }
+
+    });
 
 </script>

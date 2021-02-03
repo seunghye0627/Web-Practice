@@ -84,8 +84,8 @@
     <div id="menu-wrapper">
         <div id="menu">
             <ul>
-                <li><a class="currentPage" href="#">MAIN</a></li>
-                <li><a href="null.php">NULL</a></li>
+                <li><a href="main.php">MAIN</a></li>
+                <li><a class="currentPage" href="#">NULL</a></li>
                 <li><a href="abandon.php">유기동물 조회</a></li>
                 <li><a href="community.php">커뮤니티</a></li>
             </ul>
